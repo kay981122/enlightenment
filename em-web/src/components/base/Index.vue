@@ -20,28 +20,30 @@
       <el-scrollbar>
         <el-button v-model="isCollapse" @click="changeCollapse">| | |</el-button>  
             <el-menu class="el-menu-vertical" :collapse="isCollapse" :collapse-transition = "false" router>
-            <el-menu-item index="/home">
-            <el-icon><Burger /></el-icon>
-            <template #title>主页</template>
-            </el-menu-item>
-            <el-sub-menu index="2">
-            <template #title>
-                <el-icon><setting /></el-icon>
-                <span>系统管理</span>
-            </template>
-                <el-menu-item index="2-1">用户管理</el-menu-item>
-                <el-menu-item index="2-2">权限管理</el-menu-item>
-                <!-- <el-menu-item index="1-3">item three</el-menu-item> -->
-            </el-sub-menu>
-            <el-menu-item index="3">
-            <el-icon><document /></el-icon>
-            <template #title>项目管理</template>
-            </el-menu-item>
-        </el-menu>
+                <el-menu-item index="/home">
+                <el-icon><Burger /></el-icon>
+                <template #title>主页</template>
+                </el-menu-item>
+                <el-sub-menu index="2">
+                <template #title>
+                    <el-icon><setting /></el-icon>
+                    <span>系统管理</span>
+                </template>
+                    <el-menu-item index="/user">用户管理</el-menu-item>
+                    <el-menu-item index="/permission">权限管理</el-menu-item>
+                </el-sub-menu>
+                <el-menu-item index="#">
+                <el-icon><document /></el-icon>
+                <template #title>项目管理</template>
+                </el-menu-item>
+            </el-menu>
       </el-scrollbar>
     </el-aside>
       <el-main>
         <el-scrollbar>
+            <div class="page-header">
+                <el-page-header :icon="ArrowLeft" content="detail" />
+            </div>
             <router-view></router-view>
         </el-scrollbar>
       </el-main>
@@ -94,5 +96,9 @@ export default {
 
 .layout-container-demo .el-aside {
     background-color: #fff;
+    border-right: 1px red solid;
+}
+.page-header{
+    margin: 20px 10px;
 }
 </style>>
