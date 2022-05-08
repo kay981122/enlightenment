@@ -16,13 +16,13 @@
         </div>
       </el-header>
       <el-container>
-     <el-aside :width="isCollapse ? '64px' : '15%'">
+     <el-aside :width="isCollapse ? '64px' : '10%'">
       <el-scrollbar>
         <el-button v-model="isCollapse" @click="changeCollapse">| | |</el-button>  
-            <el-menu default-active="2" class="el-menu-vertical" :collapse="isCollapse" :collapse-transition = "false">
-            <el-menu-item index="1">
+            <el-menu class="el-menu-vertical" :collapse="isCollapse" :collapse-transition = "false" router>
+            <el-menu-item index="/home">
             <el-icon><Burger /></el-icon>
-            <template #title>首页</template>
+            <template #title>主页</template>
             </el-menu-item>
             <el-sub-menu index="2">
             <template #title>
@@ -42,11 +42,7 @@
     </el-aside>
       <el-main>
         <el-scrollbar>
-          <!-- <el-table :data="tableData">
-            <el-table-column prop="date" label="Date" width="140" />
-            <el-table-column prop="name" label="Name" width="120" />
-            <el-table-column prop="address" label="Address" />
-          </el-table> -->
+            <router-view></router-view>
         </el-scrollbar>
       </el-main>
     </el-container>
