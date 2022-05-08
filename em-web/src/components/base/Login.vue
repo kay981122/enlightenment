@@ -6,12 +6,12 @@
             <div class="box-card" v-show="show">
                 <div class="login-form">
                         <div class="input-instance">
-                            <el-input type="username" v-model="userInput.username" placeholder="用户名"></el-input>
-                            <el-input type="password" v-model="userInput.password" placeholder="密码"></el-input>
-                            <el-input class="verify" v-model="userInput.verifyCode" placeholder="验证码" ></el-input>
+                            <el-input type="username" v-model="userInput.username" placeholder="用户名" :clearable=true></el-input>
+                            <el-input type="password" v-model="userInput.password" placeholder="密码" :clearable=true></el-input>
+                            <el-input class="verify" v-model="userInput.verifyCode" placeholder="验证码" :clearable=true></el-input>
                         </div>
                         <div>
-                            <button class="btn-login" @click="submitForm('ruleForm')">登录</button>
+                            <button class="btn-login" @click="loginIn">登录</button>
                         </div>
                 </div>
             </div>
@@ -33,7 +33,12 @@ export default {
          }
     },
     methods:{
-
+        loginIn() {
+            // 路由跳转到后台主页
+            this.$router.push({
+                path:'/index'
+            })
+        }
     },
     created() {
         setInterval(()=>{
@@ -77,6 +82,7 @@ export default {
         background-color: #409eff;
         border-color: #409eff;
         padding: 0;
+        cursor: pointer;
     }
     .input-instance{
         .el-input{
