@@ -2,17 +2,13 @@
   <div id="app">
     <router-view />
   </div>
-
 </template>
 
 <script>
-
 export default {
-  name: 'App',
-  components: {
-
-  }
-}
+  name: "App",
+  components: {},
+};
 </script>
 
 <style>
@@ -20,11 +16,12 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  padding:0 !important;
+  padding: 0 !important;
   margin: 0 !important;
   min-width: 1080px;
-  min-height:1130px;
+  height: 100vh;
+  background-color: #eee;
+  overflow: hidden;
 }
 </style>

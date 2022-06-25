@@ -1,35 +1,36 @@
-const routes = [
-    {
-        path:"/",
-        redirect:"login"
-    },
-    {
-        name:'LoginItem',
-        path:"/login",
-        component:() => import('@/components/base/Login')
-    },
-    {
-        name:'indexItem',
-        path:"/index",
-        component:() => import('@/components/base/Index'),
-        children:[
-            {   
-                name:'HomeItem',
-                path:'/home',
-                component:() => import('@/components/base/Home')
-            },
-            {   
-                name:'PermissionManagerItem',
-                path:'/permission',
-                component:() => import('@/components/sys/PermissionManager')
-            },
-            {   
-                name:'UserManagerItem',
-                path:'/user',
-                component:() => import('@/components/sys/UserManager')
-            }
-        ]
-    },
-
+const routes = [{
+    path: "/",
+    redirect: "login"
+  },
+  {
+    name: 'Login',
+    path: "/login",
+    component: () => import('@/components/modules/base/Login')
+  },
+  {
+    name: 'Home',
+    path: "/home",
+    component: () => import('@/components/modules/base/Home'),
+    children: [{
+        name: 'Main',
+        path: 'main',
+        component: () => import('@/components/modules/base/Index')
+      }, {
+        name: 'User',
+        path: 'user',
+        component: () => import('@/components/modules/system/UserManager')
+      },
+      {
+        name: 'Permission',
+        path: 'permission',
+        component: () => import('@/components/modules/system/PermissionManager')
+      },
+      {
+        name: 'Domain',
+        path: 'domain',
+        component: () => import('@/components/modules/item/DomainManager')
+      },
+    ]
+  },
 ];
 export default routes
