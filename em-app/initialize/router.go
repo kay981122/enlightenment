@@ -10,7 +10,6 @@ func Routers() *gin.Engine {
 	Router := gin.Default()
 	bussinessRouter := router.RouterGroupApp.Bussiness
 	//systemRouter := router.RouterGroupApp.System
-
 	PublicGroup := Router.Group("")
 	{
 		// 健康检查

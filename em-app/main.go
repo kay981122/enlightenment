@@ -1,8 +1,6 @@
 package main
 
-import (
-	"em-app/core"
-)
+import "em-app/core"
 
 func main() {
 	core.RunWindowsServer()

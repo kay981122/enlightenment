@@ -1,5 +1,6 @@
 <template>
   <div>
+    <export-result ref="exportResult"></export-result>
     <div class="search-box">
       <el-form :inline="true" :model="searchData">
         <el-form-item label="域名">
@@ -46,8 +47,8 @@
         <el-form-item>
           <el-button type="primary" @click="query">查询</el-button>
           <el-button type="primary" @click="reset">重置</el-button>
-          <el-button type="primary" @click="reset">导出</el-button>
-          <el-button type="primary" @click="reset">导出结果</el-button>
+          <el-button type="primary" @click="exportCSV">导出</el-button>
+          <el-button type="primary" @click="showExportResult">导出结果</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -76,8 +77,12 @@
 </template>
 
 <script>
+import exportResult from '@/components/common/export-result.vue'
 export default {
   name: "HomeItem",
+  components:{
+    exportResult
+  },
   data() {
     return {
       tableData: [],
@@ -163,6 +168,18 @@ export default {
           console.log(err);
           this.loading = false;
         });
+    },
+    exportCSV() { 
+      this.$http.post("/domain/exportDomainCSV",{}).then((res)=>{
+        if (res.code == 200) {
+            this.$ElMessage({ type: "success", message: "导出成功！" });
+          } else {
+            this.$ElMessage({ type: "error", message: "导出失败！" });
+          }
+      })
+    },
+    showExportResult(){
+      this.$refs.exportResult.open();
     },
     currentChange() {
       this.query();

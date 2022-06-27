@@ -1,7 +1,7 @@
 package bussiness
 
 import (
-	global "em-app/global"
+	"em-app/global"
 	"em-app/model/bussiness"
 	"em-app/model/bussiness/request"
 )
@@ -40,6 +40,6 @@ func (domainService *DomainService) GetDomainInfoList(info request.DomainSearch)
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&domainList).Error
+	err = db.Limit(limit).Offset(offset).Order("register_date desc").Find(&domainList).Error
 	return domainList, total, err
 }

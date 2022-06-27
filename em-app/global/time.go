@@ -10,7 +10,7 @@ import (
 
 type MyTime time.Time
 
-var timeTemplates = []string{
+var TimeTemplates = []string{
 	"2006-01-02 15:04:05", //常规类型
 	"2006/01/02 15:04:05",
 	"2006-01-02",
@@ -27,20 +27,20 @@ func (t *MyTime) UnmarshalJSON(data []byte) error {
 	str := string(data)
 	//去除接收的str收尾多余的"
 	timeStr := strings.Trim(str, "\"")
-	t1, err := time.Parse(timeTemplates[2], timeStr)
+	t1, err := time.Parse(TimeTemplates[2], timeStr)
 	*t = MyTime(t1)
 	return err
 }
 
 func (t MyTime) MarshalJSON() ([]byte, error) {
-	formatted := fmt.Sprintf("\"%v\"", time.Time(t).Format(timeTemplates[2]))
+	formatted := fmt.Sprintf("\"%v\"", time.Time(t).Format(TimeTemplates[2]))
 	return []byte(formatted), nil
 }
 
 func (t MyTime) Value() (driver.Value, error) {
 	// MyTime 转换成 time.Time 类型
 	tTime := time.Time(t)
-	return tTime.Format(timeTemplates[2]), nil
+	return tTime.Format(TimeTemplates[2]), nil
 }
 
 func (t *MyTime) Scan(v interface{}) error {
@@ -59,11 +59,14 @@ func (t *MyTime) String() string {
 }
 
 func TimeStringToGoTime(tm string) time.Time {
-	for i := range timeTemplates {
-		t, err := time.ParseInLocation(timeTemplates[i], tm, time.Local)
+	for i := range TimeTemplates {
+		t, err := time.ParseInLocation(TimeTemplates[i], tm, time.Local)
 		if nil == err && !t.IsZero() {
 			return t
 		}
 	}
 	return time.Time{}
+}
+func GetCurrentTime(format string) string {
+	return time.Now().Format(format)
 }
