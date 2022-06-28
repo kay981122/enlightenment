@@ -58,13 +58,13 @@ func (s *SnowFlake) tilNextMills() int64 {
 	}
 	return timeStampMill
 }
-func (s *SnowFlake) NextId() (string, error) {
+func (s *SnowFlake) NextId() (int64, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	nowTimestamp := s.timeGen() //获取当前的毫秒级别的时间戳
 	if nowTimestamp < s.lastTimestamp {
 		//系统时钟倒退,倒退了s.lastTimestamp-nowTimestamp
-		return "-1", errors.New(fmt.Sprintf("clock moved backwards, Refusing to generate id for %d milliseconds", s.lastTimestamp-nowTimestamp))
+		return -1, errors.New(fmt.Sprintf("clock moved backwards, Refusing to generate id for %d milliseconds", s.lastTimestamp-nowTimestamp))
 	}
 	if nowTimestamp == s.lastTimestamp {
 		s.sequence = (s.sequence + 1) & s.maxSequence
@@ -76,10 +76,10 @@ func (s *SnowFlake) NextId() (string, error) {
 		s.sequence = 0
 	}
 	s.lastTimestamp = nowTimestamp
-	return string((nowTimestamp-s.twepoch)<<s.timestampShift | //时间戳差值部分
+	return (nowTimestamp-s.twepoch)<<s.timestampShift | //时间戳差值部分
 			s.datacenterId<<s.datacenterIdShift | //数据中心部分
 			s.workerId<<s.workerIdShift | //工作机器编号部分
-			s.sequence), //序列号部分
+			s.sequence, //序列号部分
 		nil
 }
 

@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -56,7 +57,7 @@ func delayExport(ex common.ExportCSVSearch) {
 	id, _ := mySnow.NextId()
 	date := global.GetCurrentTime(global.TimeTemplates[0])
 	exportCSVProgress := common.ExportCSVProgress{
-		Id:         id,
+		Id:         strconv.FormatInt(id, 10),
 		UserId:     ex.UserId,
 		Module:     ex.Module,
 		Status:     "0",
