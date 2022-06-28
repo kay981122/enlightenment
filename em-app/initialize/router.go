@@ -9,6 +9,7 @@ import (
 func Routers() *gin.Engine {
 	Router := gin.Default()
 	bussinessRouter := router.RouterGroupApp.Bussiness
+	commonRouter := router.RouterGroupApp.Common
 	//systemRouter := router.RouterGroupApp.System
 	PublicGroup := Router.Group("")
 	{
@@ -20,6 +21,9 @@ func Routers() *gin.Engine {
 	{
 		bussinessRouter.InitDomainRouter(PublicGroup)
 		//systemRouter.Init
+	}
+	{
+		commonRouter.InitExportCSVRouter(PublicGroup)
 	}
 	//PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	//{

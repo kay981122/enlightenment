@@ -15,15 +15,19 @@
                 <el-table-column prop="updateTime" label="更新时间" />
                 <el-table-column prop="" label="操作" >
                     <template #default="scope">
-                        <el-button @click="download(scope.row.id)" :disabled="scope.row.status !== '2'" type="primary">下载</el-button>
+                        <el-button @click="download(scope.row)" :disabled="scope.row.status !== '2'" type="primary">下载</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <div class="btn-group">
+              <el-button size="large" @click="queryResult">刷新</el-button>
+            </div>
       </el-dialog>
   </div>
 </template>
 
 <script>
+import FileSaver from 'file-saver'
 export default {
   components: {
 
@@ -43,9 +47,9 @@ export default {
       this.show = false
     },
     queryResult(){
-        this.$http.post("/domain/downloadDomainCSV",{
-          "module":"domain",
-          "userId":"00000"
+        this.$http.post("/csv/queryExportResult",{
+          module:"domain",
+          userId:"00000"
         }).then((res)=>{
         if (res.code != 200) {
             this.$ElMessage({ type: "error", message: "查询失败！" });
@@ -58,8 +62,16 @@ export default {
           })
       })
     },
-    download(id){
-      console.log(id);
+    async download(row){
+      this.$http.post("/csv/download",{
+        id:row.id
+      },{
+        responseType: "blob"
+      }).then((res)=>{
+        
+         let fileName = row.filePath.substring(row.filePath.lastIndexOf('\\') + 1)
+        FileSaver.saveAs(res,fileName)
+      })
     }
   },
   mounted () {
@@ -69,5 +81,8 @@ export default {
 
 </script>
 <style lang='scss' scoped>
-
+.btn-group{
+  text-align: center;
+  margin-top: 10px;
+}
 </style>

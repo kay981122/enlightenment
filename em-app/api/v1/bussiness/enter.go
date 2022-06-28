@@ -7,7 +7,5 @@ type ApiGroup struct {
 }
 
 var (
-	domainService      = service.ServiceGroupApp.BussinessServiceGroup.DomainService
-	exportCSVService   = service.ServiceGroupApp.CommonServiceGroup.ExportCSVService
-	downloadCSVService = service.ServiceGroupApp.CommonServiceGroup.DownloadCSVService
+	domainService = service.ServiceGroupApp.BussinessServiceGroup.DomainService
 )

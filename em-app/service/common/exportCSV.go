@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"em-app/global"
 	"em-app/model/bussiness"
-	"em-app/model/system"
+	"em-app/model/common"
+	bussinessService "em-app/service/bussiness"
 	"encoding/csv"
 	"fmt"
 	"log"
@@ -16,22 +17,57 @@ import (
 type ExportCSVService struct {
 }
 
+const pageSize int64 = 5000
+
 var (
-	pageSize int64 = 5000
+	exportMap = map[string]interface{}{
+		"domain": bussiness.Domain{},
+	}
 )
 
-func (exportCSVService *ExportCSVService) GenerateCSV(table string) (err error) {
-	fmt.Println("开始处理：", table)
+func (exportCSVService *ExportCSVService) GenerateCSV(exportCSVSearch common.ExportCSVSearch) (err error) {
+	// 先检查是否正在生成
+
+	fmt.Println("开始处理：", exportCSVSearch.Module)
 	// 启动延迟导出
-	go delayExport(table)
+	go delayExport(exportCSVSearch)
 	return
 }
-func delayExport(table string) {
-	db := global.Db.Model(&bussiness.Domain{})
+func delayExport(ex common.ExportCSVSearch) {
+	db := global.Db.Model(exportMap[ex.Module])
+	switch ex.Module {
+	case "domain":
+		bussinessService.SetDomainSearchData(ex.DomainSearch, db)
+	default:
+		return
+	}
+	// 初始化文件
+	var filePath = "d:/tmp"
+	var fileName = time.Now().Format("20060102150405") + "_" + ex.Module + ".csv"
+	fileName = filepath.Join(filePath, fileName)
+	err := os.MkdirAll(filePath, os.ModeDir)
+	if err != nil {
+		log.Panic(err.Error())
+		return
+	}
+	// 记录初始化文件
 	db2 := global.Db
+	mySnow, _ := global.NewSnowFlake(0, 0)
+	id, _ := mySnow.NextId()
+	date := global.GetCurrentTime(global.TimeTemplates[0])
+	exportCSVProgress := common.ExportCSVProgress{
+		Id:         id,
+		UserId:     ex.UserId,
+		Module:     ex.Module,
+		Status:     "0",
+		CreateTime: date,
+		UpdateTime: date,
+	}
+	db2.Create(exportCSVProgress)
+
 	rows, _ := db.Rows()
 	var total int64
-	err := db.Count(&total).Error
+	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
@@ -46,28 +82,6 @@ func delayExport(table string) {
 	for i := range values {
 		scanArgs[i] = &values[i]
 	}
-	// 创建文件
-	var filePath = "d:/tmp"
-	var fileName = time.Now().Format("20060102150405") + "_" + table + ".csv"
-	fileName = filepath.Join(filePath, fileName)
-	err = os.MkdirAll(filePath, os.ModeDir)
-	if err != nil {
-		log.Panic(err.Error())
-		return
-	}
-	// 记录初始化文件
-	mySnow, _ := global.NewSnowFlake(0, 0)
-	id, _ := mySnow.NextId()
-	date := global.GetCurrentTime(global.TimeTemplates[0])
-	exportCSVProgress := system.ExportCSVProgress{
-		Id:         id,
-		UserId:     "00000",
-		Module:     table,
-		Status:     "0",
-		CreateTime: date,
-		UpdateTime: date,
-	}
-	db2.Create(exportCSVProgress)
 
 	f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
 	f.WriteString("\xEF\xBB\xBF")

@@ -4,6 +4,7 @@ import (
 	"em-app/global"
 	"em-app/model/bussiness"
 	"em-app/model/bussiness/request"
+	"gorm.io/gorm"
 )
 
 type DomainService struct {
@@ -15,6 +16,15 @@ func (domainService *DomainService) GetDomainInfoList(info request.DomainSearch)
 	db := global.Db.Model(&bussiness.Domain{})
 	var domainList []bussiness.Domain
 	// 如果有条件搜索 下方会自动创建搜索语句
+	SetDomainSearchData(info, db)
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Limit(limit).Offset(offset).Order("register_date desc").Find(&domainList).Error
+	return domainList, total, err
+}
+func SetDomainSearchData(info request.DomainSearch, db *gorm.DB) {
 	if info.Domain.Domain != "" {
 		db = db.Where("domain LIKE ?", "%"+info.Domain.Domain+"%")
 	}
@@ -36,10 +46,4 @@ func (domainService *DomainService) GetDomainInfoList(info request.DomainSearch)
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
 	}
-	err = db.Count(&total).Error
-	if err != nil {
-		return
-	}
-	err = db.Limit(limit).Offset(offset).Order("register_date desc").Find(&domainList).Error
-	return domainList, total, err
 }

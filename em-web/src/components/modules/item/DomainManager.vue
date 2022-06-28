@@ -55,6 +55,7 @@
     <div class="table-box">
       <el-scrollbar>
         <el-table :data="tableData" style="width: 100%;line-height: normal;" ref="tableData" v-loading="loading">
+          <el-table-column prop="index" label="序号" />
           <el-table-column prop="domain" label="域名" />
           <el-table-column prop="title" label="标题" />
           <el-table-column prop="registerDate" label="注册时间" />
@@ -134,14 +135,7 @@ export default {
   },
   methods: {
     query() {
-      if (this.searchData.registerDate != "") {
-        this.searchData.registerBeginTime = this.searchData.registerDate[0];
-        this.searchData.registerEndTime = this.searchData.registerDate[1];
-      }
-      if (this.searchData.updateDate != "") {
-        this.searchData.updatebeginTime = this.searchData.updateDate[0];
-        this.searchData.updateEndTime = this.searchData.updateDate[1];
-      }
+      this.dealWithTime();
       this.loading = true;
       this.$http
         .post("/domain/getDomainList", {
@@ -158,6 +152,10 @@ export default {
         .then((res) => {
           if (res.code == 200) {
             this.tableData = res.data.list;
+            let index = (this.page-1) * this.pageSize + 1;
+            this.tableData.forEach(e =>{
+              e['index'] = index++;
+            })
             this.total = res.data.total;
           } else {
             this.$ElMessage({ type: "error", message: "请求失败！" });
@@ -169,8 +167,31 @@ export default {
           this.loading = false;
         });
     },
+    dealWithTime() {
+      if (this.searchData.registerDate != "") {
+        this.searchData.registerBeginTime = this.searchData.registerDate[0];
+        this.searchData.registerEndTime = this.searchData.registerDate[1];
+      }
+      if (this.searchData.updateDate != "") {
+        this.searchData.updatebeginTime = this.searchData.updateDate[0];
+        this.searchData.updateEndTime = this.searchData.updateDate[1];
+      }
+    },
     exportCSV() { 
-      this.$http.post("/domain/exportDomainCSV",{}).then((res)=>{
+      this.dealWithTime();
+      this.$http.post("/csv/export",{
+          module:"domain",
+          userId:"00000",
+          domain: this.searchData.domain,
+          title: this.searchData.title,
+          status: this.searchData.status,
+          page: this.page,
+          pageSize: this.pageSize,
+          registerBeginTime: this.searchData.registerBeginTime,
+          registerEndTime: this.searchData.registerEndTime,
+          updatebeginTime: this.searchData.updatebeginTime,
+          updateEndTime: this.searchData.updateEndTime,
+      }).then((res)=>{
         if (res.code == 200) {
             this.$ElMessage({ type: "success", message: "导出成功！" });
           } else {

@@ -2,8 +2,7 @@ package common
 
 import (
 	"em-app/global"
-	"em-app/model/system"
-	"fmt"
+	"em-app/model/common"
 )
 
 var (
@@ -14,9 +13,9 @@ var (
 type DownloadCSVService struct {
 }
 
-func (downloadCSVService *DownloadCSVService) DownloadCSV(info system.ExportCSVProgress) (list interface{}, err error) {
-	db := global.Db.Model(&system.ExportCSVProgress{})
-	var downloadCSV []system.ExportCSVProgress
+func (downloadCSVService *DownloadCSVService) QueryDownloadCSV(info common.ExportCSVProgress) (list interface{}, err error) {
+	db := global.Db.Model(&common.ExportCSVProgress{})
+	var downloadCSV []common.ExportCSVProgress
 	if info.Module != "" {
 		db = db.Where("module = ?", info.Module)
 	}
@@ -24,6 +23,12 @@ func (downloadCSVService *DownloadCSVService) DownloadCSV(info system.ExportCSVP
 		db = db.Where("user_id = ?", info.UserId)
 	}
 	err = db.Limit(limit).Offset(offset).Order("CREATE_TIME desc").Find(&downloadCSV).Error
-	fmt.Println(downloadCSV)
 	return downloadCSV, err
+}
+
+func (downloadCSVService *DownloadCSVService) GetDownloadUrl(info common.ExportCSVProgress) (url string, err error) {
+	var temp common.ExportCSVProgress
+	db := global.Db.Model(&common.ExportCSVProgress{})
+	err = db.Where("ID = ?", info.Id).First(&temp).Error
+	return temp.FilePath, err
 }

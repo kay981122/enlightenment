@@ -1,7 +1,7 @@
-package system
+package common
 
 type ExportCSVProgress struct {
-	Id         int64  `gorm:"column:ID" form:"id" json:"id"`
+	Id         string `gorm:"column:ID" form:"id" json:"id"`
 	UserId     string `gorm:"column:USER_ID" form:"userId" json:"userId"`
 	FilePath   string `gorm:"column:FILE_PATH" form:"filePath" json:"filePath"`
 	Module     string `gorm:"column:MODULE" form:"module" json:"module"`
