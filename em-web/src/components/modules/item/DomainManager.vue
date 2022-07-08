@@ -53,8 +53,9 @@
       </el-form>
     </div>
     <div class="table-box">
+      <div :class="tableData.length > 0?'table-box-top':''">
       <el-scrollbar>
-        <el-table :data="tableData" style="width: 100%;line-height: normal;" ref="tableData" v-loading="loading">
+        <el-table :data="tableData" ref="tableData" v-loading="loading">
           <el-table-column prop="index" label="序号" />
           <el-table-column prop="domain" label="域名" />
           <el-table-column prop="title" label="标题" />
@@ -63,6 +64,7 @@
           <el-table-column prop="status" label="状态" />
         </el-table>
       </el-scrollbar>
+      </div>
            <div class="table-box-bottom">
           <el-pagination
             background
@@ -225,7 +227,10 @@ export default {
   padding: 24px;
   background-color: #fff;
   border-radius: 2px;
-  height:600px;
+}
+.table-box-top{
+  margin-bottom: 10px;
+  height: 450px;
 }
 .table-box-bottom {
   display: flex;

@@ -28,32 +28,25 @@ axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.data = qs.stringify(config.data);
   }
+  // 除了登錄、註冊
+  let token = localStorage.getItem("token");
+  if (token) {
+    config.headers['Authorization'] = token;
+  }
   return config;
 }), (error) => {
-  ElMessageBox.alert('系统提示', 'Title', {
-    confirmButtonText: '确认',
-    callback: (action) => {
-      ElMessage({
-        type: 'info',
-        message: `action: ${action}`,
-      })
-    },
+  ElMessageBox.alert(error, '系統提示', {
+    confirmButtonText: '确认'
   })
   return Promise.reject(error);
 }
 axios.interceptors.response.use(response => {
-  // if(response.data.status !== 200) {
-  //   ElMessageBox.alert('系统提示', 'Title', {
-  //     confirmButtonText: '确认',
-  //     callback: (action) => {
-  //       ElMessage({
-  //         type: 'info',
-  //         message: `action: ${action}`,
-  //       })
-  //     },
-  //   })
-  //   return Promise.reject(response.data)
-  // }
+  if (response.status !== 200) {
+    // ElMessageBox.alert(response.data.msg, '系統提示', {
+    //   confirmButtonText: '确认'
+    // })
+    return Promise.reject(response.data)
+  }
   return Promise.resolve(response.data)
 }), error => {
   return Promise.reject(error)

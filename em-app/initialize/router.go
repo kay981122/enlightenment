@@ -10,11 +10,12 @@ func Routers() *gin.Engine {
 	Router := gin.Default()
 	bussinessRouter := router.RouterGroupApp.Bussiness
 	commonRouter := router.RouterGroupApp.Common
+	systemRouter := router.RouterGroupApp.System
 	//systemRouter := router.RouterGroupApp.System
 	PublicGroup := Router.Group("")
 	{
 		// 健康检查
-		PublicGroup.GET("/health", func(c *gin.Context) {
+		PublicGroup.POST("/health", func(c *gin.Context) {
 			c.JSON(200, "ok")
 		})
 	}
@@ -24,6 +25,9 @@ func Routers() *gin.Engine {
 	}
 	{
 		commonRouter.InitExportCSVRouter(PublicGroup)
+	}
+	{
+		systemRouter.InitUserRouter(PublicGroup)
 	}
 	//PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	//{

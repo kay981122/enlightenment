@@ -8,19 +8,19 @@
           <div class="input-instance">
             <el-input
               type="username"
-              v-model="userInput.username"
+              v-model="user.username"
               placeholder="用户名"
               :clearable="true"
             ></el-input>
             <el-input
               type="password"
-              v-model="userInput.password"
+              v-model="user.password"
               placeholder="密码"
               :clearable="true"
             ></el-input>
             <el-input
               class="verify"
-              v-model="userInput.verifyCode"
+              v-model="user.verifyCode"
               placeholder="验证码"
               :clearable="true"
             ></el-input>
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       show: false,
-      userInput: {
+      user: {
         username: "",
         password: "",
         verifyCode: "",
@@ -49,10 +49,25 @@ export default {
   },
   methods: {
     loginIn() {
-      // 路由跳转到后台主页
-      this.$router.push({
-        path: "/home/main",
-      });
+       this.$http
+        .post("/user/login",this.user)
+        .then((res) => {
+          if (res.code == 200) {
+            localStorage.setItem("token",res.data)
+            // 验证通过后，路由跳转到后台主页
+            setTimeout(() => {
+              this.$router.push({
+                path: "/home/main",
+              });
+         }, 1500);
+          } else {
+            this.$ElMessage({ type: "error", message: res.msg });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     },
   },
   created() {

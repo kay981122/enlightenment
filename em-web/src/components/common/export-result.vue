@@ -68,9 +68,8 @@ export default {
       },{
         responseType: "blob"
       }).then((res)=>{
-        
-         let fileName = row.filePath.substring(row.filePath.lastIndexOf('\\') + 1)
-        FileSaver.saveAs(res,fileName)
+          let fileName = row.filePath.substring(row.filePath.lastIndexOf('\\') + 1)
+          FileSaver.saveAs(res,fileName)
       })
     }
   },
