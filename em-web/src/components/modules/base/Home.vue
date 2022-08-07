@@ -20,7 +20,7 @@
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            <span>Tom</span>
+            <span>{{userInfo.nickname}}</span>
           </div>
         </el-col>
       </el-row>
@@ -87,6 +87,7 @@ export default {
   data() {
     return {
       isCollapse: false,
+      userInfo:{}
     };
   },
   methods: {
@@ -119,7 +120,7 @@ export default {
       }
     },
     loginOut() {
-      // localStorage.clear()
+      localStorage.clear()
       this.$router.push({
         path: "/login",
       });
@@ -127,6 +128,23 @@ export default {
   },
   mounted() {
       this.$store.commit('setActiveIndex', this.$route.path);
+      let userInfo = this.$route.params.userInfo
+      if(userInfo) {
+        this.userInfo = JSON.parse(userInfo);
+        localStorage.setItem("userInfo",userInfo)
+        // 新登录初始化菜单
+        this.$store.commit('initTabs', {});
+        return;
+      }
+        userInfo = localStorage.getItem("userInfo")
+        if(userInfo) {
+           localStorage.setItem("userInfo",userInfo)
+           this.userInfo = JSON.parse(userInfo)
+           return;
+        }
+      this.$router.push({
+        path: "/login",
+      });
   },
   created() {
       // 在页面加载时读取localStorage里的状态信息

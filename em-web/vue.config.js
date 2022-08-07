@@ -3,6 +3,7 @@ const {
 } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+  outputDir: 'dist', //打包输出目录
   devServer: {
     port: 8090,
     // 跨域问题解决 代理

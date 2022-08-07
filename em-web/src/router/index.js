@@ -13,7 +13,7 @@ router.beforeEach((to, from, next) => {
   if (token) {
     next()
   } else {
-    if (to.name === 'login' || to.name === 'register') {
+    if (to.path === '/login' || to.path === '/register') {
       next()
     } else {
       next('/login')

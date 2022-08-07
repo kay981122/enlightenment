@@ -27,6 +27,13 @@ export let tabVuex = {
     // 设置当前激活的tab
     setActiveIndex(state, index) {
       state.activeIndex = index;
+    },
+    initTabs(state) {
+      state.openTab = []
+      state.openTab.push({
+        route: '/home/main',
+        name: '主页'
+      })
     }
   },
   actions: {

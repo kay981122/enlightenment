@@ -41,10 +41,11 @@ axios.interceptors.request.use((config) => {
   return Promise.reject(error);
 }
 axios.interceptors.response.use(response => {
+  console.log(response)
   if (response.status !== 200) {
-    // ElMessageBox.alert(response.data.msg, '系統提示', {
-    //   confirmButtonText: '确认'
-    // })
+    ElMessageBox.alert(response.data.msg, '系統提示', {
+      confirmButtonText: '确认'
+    })
     return Promise.reject(response.data)
   }
   return Promise.resolve(response.data)

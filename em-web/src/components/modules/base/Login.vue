@@ -53,11 +53,15 @@ export default {
         .post("/user/login",this.user)
         .then((res) => {
           if (res.code == 200) {
-            localStorage.setItem("token",res.data)
+            console.log(res.data.userInfo);
+            localStorage.setItem("token",res.data.token);
             // 验证通过后，路由跳转到后台主页
             setTimeout(() => {
               this.$router.push({
-                path: "/home/main",
+                name: "Main",
+                params:{
+                  userInfo:JSON.stringify(res.data.userInfo)
+                }
               });
          }, 1500);
           } else {

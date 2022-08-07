@@ -3,30 +3,30 @@ const routes = [{
     redirect: "login"
   },
   {
-    name: 'login',
+    name: 'Login',
     path: "/login",
     component: () => import('@/components/modules/base/Login')
   },
   {
-    name: 'home',
+    name: 'Home',
     path: "/home",
     component: () => import('@/components/modules/base/Home'),
     children: [{
-        name: 'main',
+        name: 'Main',
         path: 'main',
         component: () => import('@/components/modules/base/Index')
       }, {
-        name: 'user',
+        name: 'User',
         path: 'user',
         component: () => import('@/components/modules/system/UserManager')
       },
       {
-        name: 'permission',
+        name: 'Permission',
         path: 'permission',
         component: () => import('@/components/modules/system/PermissionManager')
       },
       {
-        name: 'domain',
+        name: 'Domain',
         path: 'domain',
         component: () => import('@/components/modules/item/DomainManager')
       },

@@ -16,10 +16,10 @@ func (u *UserApi) Login(c *gin.Context) {
 		response.FailWithMessage("请输入账号或密码", c)
 		return
 	}
-	userInfo, err := userService.VerifyPassword(user)
+	result, err := userService.VerifyPassword(user)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithDetailed(userInfo, "登录验证成功", c)
+		response.OkWithDetailed(result, "登录验证成功", c)
 	}
 }
