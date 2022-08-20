@@ -4,7 +4,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-// 第一步：定义结构体
+// MyCustomClaims 第一步：定义结构体
 // MyClaims 定义结构体并继承jwt.StandardClaims
 // jwt包自带的jwt.StandardClaims只包含了官方字段
 // 我们需要额外记录一个username和id字段，所以要自定义结构体

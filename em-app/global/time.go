@@ -32,14 +32,14 @@ func (t *MyTime) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-func (t MyTime) MarshalJSON() ([]byte, error) {
-	formatted := fmt.Sprintf("\"%v\"", time.Time(t).Format(TimeTemplates[2]))
+func (t *MyTime) MarshalJSON() ([]byte, error) {
+	formatted := fmt.Sprintf("\"%v\"", time.Time(*t).Format(TimeTemplates[2]))
 	return []byte(formatted), nil
 }
 
-func (t MyTime) Value() (driver.Value, error) {
+func (t *MyTime) Value() (driver.Value, error) {
 	// MyTime 转换成 time.Time 类型
-	tTime := time.Time(t)
+	tTime := time.Time(*t)
 	return tTime.Format(TimeTemplates[2]), nil
 }
 
@@ -55,7 +55,7 @@ func (t *MyTime) Scan(v interface{}) error {
 }
 
 func (t *MyTime) String() string {
-	return fmt.Sprintf("hhh:%s", time.Time(*t).String())
+	return fmt.Sprintf("\"%v\"", time.Time(*t).Format(TimeTemplates[2]))
 }
 
 func TimeStringToGoTime(tm string) time.Time {

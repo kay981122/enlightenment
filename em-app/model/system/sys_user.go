@@ -1,6 +1,6 @@
 package system
 
-// 用户表model
+// User 用户表model
 type User struct {
 	Id         string `gorm:"column:id" form:"id" json:"id"`
 	Username   string `gorm:"column:username" form:"username" json:"username"`

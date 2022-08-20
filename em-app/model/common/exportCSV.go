@@ -6,6 +6,7 @@ type ExportCSVProgress struct {
 	FilePath   string `gorm:"column:FILE_PATH" form:"filePath" json:"filePath"`
 	Module     string `gorm:"column:MODULE" form:"module" json:"module"`
 	Status     string `gorm:"column:STATUS" form:"status" json:"status"`
+	FileName   string `gorm:"column:FILE_NAME" form:"fileName" json:"fileName"`
 	CreateTime string `gorm:"column:CREATE_TIME" form:"createTime" json:"createTime"`
 	UpdateTime string `gorm:"column:UPDATE_TIME" form:"updateTime" json:"updateTime"`
 }

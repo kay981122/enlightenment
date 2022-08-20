@@ -28,7 +28,6 @@ var (
 
 func (exportCSVService *ExportCSVService) GenerateCSV(exportCSVSearch common.ExportCSVSearch) (err error) {
 	// 先检查是否正在生成
-
 	fmt.Println("开始处理：", exportCSVSearch.Module)
 	// 启动延迟导出
 	go delayExport(exportCSVSearch)
@@ -36,21 +35,23 @@ func (exportCSVService *ExportCSVService) GenerateCSV(exportCSVSearch common.Exp
 }
 func delayExport(ex common.ExportCSVSearch) {
 	db := global.Db.Model(exportMap[ex.Module])
+	var fileName = time.Now().Format("20060102150405") + "_" + ex.Module
+	// 根据查询条件去生成文件名称
 	switch ex.Module {
 	case "domain":
-		bussinessService.SetDomainSearchData(ex.DomainSearch, db)
+		fileName = bussinessService.SetDomainSearchData(ex.DomainSearch, db, fileName)
 	default:
 		return
 	}
-	// 初始化文件
-	var filePath = "d:/tmp"
-	var fileName = time.Now().Format("20060102150405") + "_" + ex.Module + ".csv"
-	fileName = filepath.Join(filePath, fileName)
-	err := os.MkdirAll(filePath, os.ModeDir)
+	// 初始化目录
+	var fileDir = "d:/tmp"
+	err := os.MkdirAll(fileDir, os.ModeDir)
 	if err != nil {
 		log.Panic(err.Error())
 		return
 	}
+	var filePath = ""
+	filePath = filepath.Join(fileDir, fileName)
 	// 记录初始化文件
 	db2 := global.Db
 	mySnow, _ := global.NewSnowFlake(0, 0)
@@ -61,6 +62,7 @@ func delayExport(ex common.ExportCSVSearch) {
 		UserId:     ex.UserId,
 		Module:     ex.Module,
 		Status:     "0",
+		FileName:   fileName,
 		CreateTime: date,
 		UpdateTime: date,
 	}
@@ -84,7 +86,7 @@ func delayExport(ex common.ExportCSVSearch) {
 		scanArgs[i] = &values[i]
 	}
 
-	f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	f.WriteString("\xEF\xBB\xBF")
 	defer f.Close()
 	if err != nil {
@@ -94,7 +96,7 @@ func delayExport(ex common.ExportCSVSearch) {
 	// 记录正在生成文件
 	exportCSVProgress.Status = "1"
 	exportCSVProgress.UpdateTime = global.GetCurrentTime(global.TimeTemplates[0])
-	exportCSVProgress.FilePath = fileName
+	exportCSVProgress.FilePath = filePath
 	db2.Save(&exportCSVProgress)
 	// 先写好第一行数据--列名称
 	w := csv.NewWriter(f)
@@ -103,7 +105,7 @@ func delayExport(ex common.ExportCSVSearch) {
 	// 遍历按pageSize大小写入数据
 	var count int64 = 0
 	for count < total {
-		totalValues := [][]string{}
+		var totalValues [][]string
 		var targetCount = count + pageSize
 		for rows.Next() {
 			var s []string
@@ -115,7 +117,6 @@ func delayExport(ex common.ExportCSVSearch) {
 				db2.Save(&exportCSVProgress)
 				return
 			}
-
 			for _, v := range values {
 				s = append(s, string(v))
 			}

@@ -9,7 +9,7 @@ type DomainSearch struct {
 	bussiness.Domain
 	RegisterBeginTime string `json:"registerBeginTime" form:"registerBeginTime"`
 	RegisterEndTime   string `json:"registerEndTime" form:"registerEndTime"`
-	UpdateBeginTime   string `json:"updateBeginTime" form:"updateBeginTime"`
-	UpdateEndTime     string `json:"updateEndTime" form:"updateEndTime"`
+	//UpdateBeginTime   string `json:"updateBeginTime" form:"updateBeginTime"`
+	//UpdateEndTime     string `json:"updateEndTime" form:"updateEndTime"`
 	request.PageInfo
 }

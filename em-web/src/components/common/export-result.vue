@@ -1,8 +1,9 @@
 <template>
   <div>
-      <el-dialog v-model="show" title="导出结果" width="40%" :before-close="handleClose">
+      <el-dialog v-model="show" title="导出结果" width="60%" :before-close="handleClose">
             <el-table :data="tableData" style="width: 100%">
               <el-table-column prop="index" label="序号" />
+              <el-table-column prop="fileName" label="文件名称"/>
                 <el-table-column prop="status" label="状态">
                   <template #default="scope">
                       <el-tag  v-if="scope.row.status == '0'" type="info">初始化中</el-tag>

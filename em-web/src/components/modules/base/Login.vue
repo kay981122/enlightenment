@@ -53,7 +53,6 @@ export default {
         .post("/user/login",this.user)
         .then((res) => {
           if (res.code == 200) {
-            console.log(res.data.userInfo);
             localStorage.setItem("token",res.data.token);
             // 验证通过后，路由跳转到后台主页
             setTimeout(() => {
@@ -68,10 +67,6 @@ export default {
             this.$ElMessage({ type: "error", message: res.msg });
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
-
     },
   },
   created() {

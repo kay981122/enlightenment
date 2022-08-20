@@ -31,7 +31,7 @@
             value-format="YYYY-MM-DD"
           />
         </el-form-item>
-        <el-form-item label="更新时间">
+        <!-- <el-form-item label="更新时间">
           <el-date-picker
             v-model="searchData.updateDate"
             type="daterange"
@@ -43,7 +43,7 @@
             format="YYYY-MM-DD"
             value-format="YYYY-MM-DD"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="query">查询</el-button>
           <el-button type="primary" @click="reset">重置</el-button>
@@ -60,7 +60,7 @@
           <el-table-column prop="domain" label="域名" />
           <el-table-column prop="title" label="标题" />
           <el-table-column prop="registerDate" label="注册时间" />
-          <el-table-column prop="updateDate" label="更新时间" />
+          <!-- <el-table-column prop="updateDate" label="更新时间" /> -->
           <el-table-column prop="status" label="状态" />
         </el-table>
       </el-scrollbar>
@@ -96,9 +96,9 @@ export default {
         registerDate: "",
         registerBeginTime: "",
         registerEndTime: "",
-        updateDate: "",
-        updatebeginTime: "",
-        updateEndTime: "",
+        // updateDate: "",
+        // updatebeginTime: "",
+        // updateEndTime: "",
       },
       total: 0,
       pageSize: 10,
@@ -148,8 +148,8 @@ export default {
           pageSize: this.pageSize,
           registerBeginTime: this.searchData.registerBeginTime,
           registerEndTime: this.searchData.registerEndTime,
-          updatebeginTime: this.searchData.updatebeginTime,
-          updateEndTime: this.searchData.updateEndTime,
+          // updatebeginTime: this.searchData.updatebeginTime,
+          // updateEndTime: this.searchData.updateEndTime,
         })
         .then((res) => {
           if (res.code == 200) {
@@ -174,10 +174,10 @@ export default {
         this.searchData.registerBeginTime = this.searchData.registerDate[0];
         this.searchData.registerEndTime = this.searchData.registerDate[1];
       }
-      if (this.searchData.updateDate != "") {
-        this.searchData.updatebeginTime = this.searchData.updateDate[0];
-        this.searchData.updateEndTime = this.searchData.updateDate[1];
-      }
+      // if (this.searchData.updateDate != "") {
+      //   this.searchData.updatebeginTime = this.searchData.updateDate[0];
+      //   this.searchData.updateEndTime = this.searchData.updateDate[1];
+      // }
     },
     exportCSV() { 
       this.dealWithTime();
@@ -191,8 +191,8 @@ export default {
           pageSize: this.pageSize,
           registerBeginTime: this.searchData.registerBeginTime,
           registerEndTime: this.searchData.registerEndTime,
-          updatebeginTime: this.searchData.updatebeginTime,
-          updateEndTime: this.searchData.updateEndTime,
+          // updatebeginTime: this.searchData.updatebeginTime,
+          // updateEndTime: this.searchData.updateEndTime,
       }).then((res)=>{
         if (res.code == 200) {
             this.$ElMessage({ type: "success", message: "导出成功！" });
